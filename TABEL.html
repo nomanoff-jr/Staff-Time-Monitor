@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="uz">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ILHAN TEKSTIL TABELI</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background: #f0f4f8;
+        padding: 20px;
+      }
+      h1,
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+      form,
+      .settings,
+      #selectedSummaryContainer,
+      #summary {
+        max-width: 600px;
+        margin: 20px auto;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      input,
+      button,
+      select {
+        width: 100%;
+        padding: 12px 15px;
+        margin: 8px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+        box-sizing: border-box;
+      }
+      button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+      table {
+        max-width: 700px;
+        margin: 25px auto;
+        border-collapse: collapse;
+        width: 100%;
+        background: white;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+      }
+      th,
+      td {
+        padding: 12px 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+      }
+      th {
+        background-color: #007bff;
+        color: white;
+      }
+      #summary,
+      #selectedSummaryContainer {
+        background: white;
+      }
+      #selectedSummaryContainer {
+        background: #e9f5ff;
+      }
+      label {
+        font-weight: bold;
+      }
+      .break-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+      }
+      .break-item input {
+        width: 48%;
+      }
+      .break-list {
+        margin-bottom: 10px;
+      }
+      .break-list button {
+        width: auto;
+        padding: 6px 10px;
+        background-color: #dc3545;
+        margin-left: 5px;
+      }
+      .break-list button:hover {
+        background-color: #b02a37;
+      }
+
+      /* Responsive dizayn */
+      @media (max-width: 768px) {
+        form,
+        .settings,
+        #selectedSummaryContainer,
+        #summary,
+        table {
+          width: 95%;
+          margin: 10px auto;
+        }
+        input,
+        button,
+        select {
+          font-size: 14px;
+          padding: 10px;
+        }
+        table th,
+        table td {
+          padding: 8px 5px;
+          font-size: 14px;
+        }
+        .break-item {
+          flex-direction: column;
+          gap: 5px;
+        }
+        .break-item input {
+          width: 100%;
+        }
+        .admin-link {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          text-decoration: none;
+        }
+
+        .admin-button {
+          padding: 8px 16px;
+          font-size: 14px;
+          background-color: #2d80ef;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          transition: background-color 0.3s ease;
+        }
+
+        .admin-button:hover {
+          background-color: #1c64d1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <a href="password.html">
+      <button style="width: 180px" class="admin-button">
+        Admin Panelga o'tish
+      </button>
+    </a>
+    <h1>Ishchilar Keldi-Ketdi Tabel</h1>
+
+    <!-- Bo‘lim tanlash -->
+    <div style="max-width: 600px; margin: 10px auto; text-align: center">
+      <label for="selectDepartment"><strong>Bo‘limni tanlang:</strong></label>
+      <select id="selectDepartment">
+        <option value="">Bo‘limni tanlang</option>
+        <option value="Ma'muriyat">Ma'muriyat</option>
+        <option value="Patok masterlari">Patok masterlari</option>
+        <option value="Kroy material">Kroy material</option>
+        <option value="Kroy furnitura">Kroy furnitura</option>
+        <option value="Lenta">Lenta</option>
+        <option value="Cho'ntak robot">Cho'ntak robot</option>
+        <option value="Klapn tayyorlash">Klapn tayyorlash</option>
+        <option value="Tana patok">Tana patok</option>
+        <option value="Astar patok">Astar patok</option>
+        <option value="Tana astar">Tana astar</option>
+        <option value="Yeng tayyorlash">Yeng tayyorlash</option>
+        <option value="Yeng o'rnatish">Yeng o'rnatish</option>
+        <option value="Gotoviy">Gatoviy</option>
+        <option value="OTK">OTK</option>
+        <option value="Upakovka">Upakovka</option>
+        <option value="Haydovchilar">Haydovchilar</option>
+      </select>
+    </div>
+
+    <!-- Ishchini tanlash -->
+    <div style="max-width: 600px; margin: 10px auto; text-align: center">
+      <label for="selectWorker"><strong>Ishchini tanlang:</strong></label>
+      <select id="selectWorker">
+        <option value="">-- Ishchini tanlang --</option>
+      </select>
+    </div>
+
+    <div id="selectedSummaryContainer">
+      <strong>Tanlangan ishchi hisobot:</strong>
+      <div id="selectedSummary">Ishchini yuqoridan tanlang.</div>
+    </div>
+
+    <form id="form">
+      <input type="text" id="name" placeholder="Ishchi ismi" required />
+      <select id="department" required>
+        <option value="">Bo‘limni tanlang</option>
+        <option value="Ma'muriyat">Ma'muriyat</option>
+        <option value="Patok masterlari">Patok masterlari</option>
+        <option value="Kroy material">Kroy material</option>
+        <option value="Kroy furnitura">Kroy furnitura</option>
+        <option value="Lenta">Lenta</option>
+        <option value="Cho'ntak robot">Cho'ntak robot</option>
+        <option value="Klapn tayyorlash">Klapn tayyorlash</option>
+        <option value="Tana patok">Tana patok</option>
+        <option value="Astar patok">Astar patok</option>
+        <option value="Tana astar">Tana astar</option>
+        <option value="Yeng tayyorlash">Yeng tayyorlash</option>
+        <option value="Yeng o'rnatish">Yeng o'rnatish</option>
+        <option value="Gotoviy">Gatoviy</option>
+        <option value="OTK">OTK</option>
+        <option value="Upakovka">Upakovka</option>
+        <option value="Haydovchilar">Haydovchilar</option>
+      </select>
+      <input type="date" id="date" required />
+      <input type="time" id="start" required />
+      <input type="time" id="end" required />
+      <button type="submit">Qo‘shish</button>
+    </form>
+
+    <table id="table">
+      <thead>
+        <tr>
+          <th>Ism</th>
+          <th>Bo‘lim</th>
+          <th>Sana</th>
+          <th>Kelish</th>
+          <th>Ketish</th>
+          <th>Amallar</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="summary">
+      <h3>Umumiy Hisobot</h3>
+      <div id="summaryContent">Ma'lumot yo‘q</div>
+    </div>
+
+    <div style="max-width: 700px; margin: 20px auto">
+      <button id="export">Excel (CSV) ga saqlash</button>
+    </div>
+
+    <!-- ADMIN SOZLAMALARI -->
+<div class="settings"  style="display: none;">
+  <!-- <h2>Admin Sozlamalari</h2> -->
+  <!-- <label for="workStart">Ish boshlash vaqti:</label> -->
+  <input type="time" id="workStart" value="09:00" />
+
+  <!-- <label for="workEnd">Ish tugash vaqti:</label> -->
+  <input type="time" id="workEnd" value="18:00" />
+
+  <!-- <h3>Tanaffuslar:</h3> -->
+  <div id="breaksContainer" class="break-list"></div>
+  <button id="addBreakBtn" style="background-color:#28a745;">Yangi tanaffus qo‘shish</button>
+  <button id="saveSettingsBtn" style="margin-top:15px;">Sozlamalarni Saqlash</button>
+</div>
+
+    <script>
+      const form = document.getElementById("form");
+      const tbody = document.querySelector("#table tbody");
+      const summaryContent = document.getElementById("summaryContent");
+      const exportBtn = document.getElementById("export");
+      const selectedSummaryDiv = document.getElementById("selectedSummary");
+      const selectWorker = document.getElementById("selectWorker");
+      const selectDepartment = document.getElementById("selectDepartment");
+
+      // Sozlamalar elementlari
+      const workStartInput = document.getElementById("workStart");
+      const workEndInput = document.getElementById("workEnd");
+      const breaksContainer = document.getElementById("breaksContainer");
+      const addBreakBtn = document.getElementById("addBreakBtn");
+      const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+
+      let records = JSON.parse(localStorage.getItem("records")) || [];
+
+      // Default tanaffuslar (agar localStorage da bo'lmasa)
+      let breaks = JSON.parse(localStorage.getItem("breaks")) || [
+        ["10:00", "10:10"],
+        ["12:20", "13:00"],
+        ["15:00", "15:10"],
+      ];
+
+      // Ish vaqti defaulti
+      let workStart = localStorage.getItem("workStart") || "09:00";
+      let workEnd = localStorage.getItem("workEnd") || "18:00";
+
+      // Ish vaqti inputlarini sozlash
+      workStartInput.value = workStart;
+      workEndInput.value = workEnd;
+
+      // Breaklar DOMga chiqarish funksiyasi
+      function renderBreaks() {
+        breaksContainer.innerHTML = "";
+        breaks.forEach((br, i) => {
+          const div = document.createElement("div");
+          div.classList.add("break-item");
+          div.innerHTML = `
+        <input type="time" class="break-start" value="${br[0]}" />
+        <input type="time" class="break-end" value="${br[1]}" />
+        <button data-index="${i}" title="Tanaffusni o'chirish">&times;</button>
+      `;
+          breaksContainer.appendChild(div);
+
+          // O'chirish tugmasi
+          div.querySelector("button").onclick = () => {
+            breaks.splice(i, 1);
+            renderBreaks();
+          };
+        });
+      }
+
+      // breaklarni va ish vaqtlarini localStorage ga saqlash
+      function saveSettings() {
+        // Ish boshlash va tugash vaqtini tekshirish
+        if (workStartInput.value >= workEndInput.value) {
+          alert("Ish boshlash vaqti ish tugash vaqtidan oldin bo‘lishi kerak!");
+          return false;
+        }
+        // breaklar vaqtlarini tekshirish
+        for (let br of breaks) {
+          if (br[0] >= br[1]) {
+            alert(
+              "Tanaffus boshlanish vaqti tugash vaqtidan oldin bo‘lishi kerak!"
+            );
+            return false;
+          }
+        }
+        localStorage.setItem("workStart", workStartInput.value);
+        localStorage.setItem("workEnd", workEndInput.value);
+        localStorage.setItem("breaks", JSON.stringify(breaks));
+        workStart = workStartInput.value;
+        workEnd = workEndInput.value;
+        alert("Sozlamalar saqlandi");
+        updateSummary();
+      }
+
+      // Yangi tanaffus qo'shish
+      addBreakBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        breaks.push(["12:00", "12:15"]);
+        renderBreaks();
+      });
+
+      // Tanaffus vaqtlarini o'zgartirishga ruxsat berish
+      breaksContainer.addEventListener("input", (e) => {
+        if (
+          e.target.classList.contains("break-start") ||
+          e.target.classList.contains("break-end")
+        ) {
+          const idx = [...breaksContainer.children].indexOf(
+            e.target.parentElement
+          );
+          if (idx >= 0) {
+            const start =
+              e.target.parentElement.querySelector(".break-start").value;
+            const end =
+              e.target.parentElement.querySelector(".break-end").value;
+            breaks[idx] = [start, end];
+          }
+        }
+      });
+
+      saveSettingsBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        saveSettings();
+      });
+
+      // Vaqtlarni daqiqaga aylantirish (HH:MM => totalMinutes)
+      function timeToMinutes(t) {
+        const [h, m] = t.split(":").map(Number);
+        return h * 60 + m;
+      }
+      // daqiqani vaqt formatiga o‘tkazish (e.g. 540 -> 09:00)
+      function minutesToTime(min) {
+        let h = Math.floor(min / 60);
+        let m = min % 60;
+        return (h < 10 ? "0" : "") + h + ":" + (m < 10 ? "0" : "") + m;
+      }
+
+      // Ish vaqti orasidan tanaffuslarni chiqarish
+      function calculateWorkMinutes(start, end, breaks) {
+        let total = end - start;
+        breaks.forEach((br) => {
+          let brStart = timeToMinutes(br[0]);
+          let brEnd = timeToMinutes(br[1]);
+          // tanaffus ish vaqtida bo‘lsa, chiqaramiz
+          if (brEnd <= start || brStart >= end) return;
+          // tanaffus ish vaqtiga qisman to‘g‘ri keladigan qismi
+          let overlapStart = Math.max(start, brStart);
+          let overlapEnd = Math.min(end, brEnd);
+          total -= overlapEnd - overlapStart;
+        });
+        return total < 0 ? 0 : total;
+      }
+
+      // Ishchi obyektini yaratish
+      function createRecord(name, department, date, start, end) {
+        return {
+          id: Date.now() + Math.random(),
+          name,
+          department,
+          date,
+          start,
+          end,
+        };
+      }
+
+      // Ishchini selectga qo‘shish
+      function updateWorkerOptions() {
+        const allWorkers = [...new Set(records.map((r) => r.name))];
+        selectWorker.innerHTML =
+          '<option value="">-- Ishchini tanlang --</option>';
+        allWorkers.forEach((w) => {
+          selectWorker.innerHTML += `<option value="${w}">${w}</option>`;
+        });
+      }
+
+      // Jadvallni chizish
+      function renderTable() {
+        const filterDept = selectDepartment.value;
+        tbody.innerHTML = "";
+        let filtered = filterDept
+          ? records.filter((r) => r.department === filterDept)
+          : records;
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6">Ma\'lumot topilmadi</td></tr>';
+          return;
+        }
+
+        filtered.forEach(({ id, name, department, date, start, end }) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+        <td>${name}</td>
+        <td>${department}</td>
+        <td>${date}</td>
+        <td>${start}</td>
+        <td>${end}</td>
+        <td><button data-id="${id}" class="deleteBtn">O'chirish</button></td>
+      `;
+          tbody.appendChild(tr);
+        });
+
+        // O'chirish tugmalari uchun hodisa qo‘shish
+        document.querySelectorAll(".deleteBtn").forEach((btn) => {
+          btn.onclick = () => {
+            const id = btn.dataset.id;
+            records = records.filter((r) => r.id != id);
+            saveRecords();
+            renderTable();
+            updateWorkerOptions();
+            updateSummary();
+            if (selectWorker.value) updateSelectedSummary(selectWorker.value);
+          };
+        });
+      }
+
+      // Malumotlarni localStorage ga saqlash
+      function saveRecords() {
+        localStorage.setItem("records", JSON.stringify(records));
+      }
+
+      // Umumiy hisobotni hisoblash va ko‘rsatish
+      function updateSummary() {
+        const filterDept = selectDepartment.value;
+        let filtered = filterDept
+          ? records.filter((r) => r.department === filterDept)
+          : records;
+        if (filtered.length === 0) {
+          summaryContent.innerHTML = "Ma'lumot yo'q";
+          return;
+        }
+
+        // Har bir ishchi uchun umumiy ishlagan daqiqalar hisoblash
+        let summary = {};
+        filtered.forEach((r) => {
+          let startMin = timeToMinutes(r.start);
+          let endMin = timeToMinutes(r.end);
+          let worked = calculateWorkMinutes(startMin, endMin, breaks);
+          if (!summary[r.name]) summary[r.name] = 0;
+          summary[r.name] += worked;
+        });
+
+        // Hisobotni HTMLga aylantirish
+        let html = '<table style="width:100%; border-collapse:collapse;">';
+        html += `<thead>
+      <tr>
+        <th style="border:1px solid #ddd; padding:6px;">Ism</th>
+        <th style="border:1px solid #ddd; padding:6px;">Umumiy ishlagan soat</th>
+      </tr>
+    </thead><tbody>`;
+
+        for (let name in summary) {
+          html += `<tr>
+        <td style="border:1px solid #ddd; padding:6px;">${name}</td>
+        <td style="border:1px solid #ddd; padding:6px;">${(
+          summary[name] / 60
+        ).toFixed(2)}</td>
+      </tr>`;
+        }
+        html += "</tbody></table>";
+        summaryContent.innerHTML = html;
+      }
+
+      // Tanlangan ishchi hisobotini yangilash
+      function updateSelectedSummary(name) {
+        if (!name) {
+          selectedSummaryDiv.innerHTML = "Ishchini yuqoridan tanlang.";
+          return;
+        }
+        let workerRecords = records.filter((r) => r.name === name);
+        if (workerRecords.length === 0) {
+          selectedSummaryDiv.innerHTML = "Bu ishchi uchun ma'lumot yo'q.";
+          return;
+        }
+
+        let totalMinutes = 0;
+        workerRecords.forEach((r) => {
+          let startMin = timeToMinutes(r.start);
+          let endMin = timeToMinutes(r.end);
+          let worked = calculateWorkMinutes(startMin, endMin, breaks);
+          totalMinutes += worked;
+        });
+
+        selectedSummaryDiv.innerHTML = `
+      <p><b>Ism:</b> ${name}</p>
+      <p><b>Umumiy ishlagan soat:</b> ${(totalMinutes / 60).toFixed(2)}</p>
+      <p><b>Umumiy kelgan kuni:</b> ${workerRecords.length}</p>
+    `;
+      }
+
+      // Formani yuborish
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = form.name.value.trim();
+        const department = form.department.value;
+        const date = form.date.value;
+        const start = form.start.value;
+        const end = form.end.value;
+
+        if (!name || !department || !date || !start || !end) {
+          alert("Iltimos, barcha maydonlarni to'ldiring!");
+          return;
+        }
+        if (start >= end) {
+          alert("Kelish vaqti ketish vaqtidan oldin bo'lishi kerak!");
+          return;
+        }
+
+        const rec = createRecord(name, department, date, start, end);
+        records.push(rec);
+        saveRecords();
+        renderTable();
+        updateWorkerOptions();
+        updateSummary();
+
+        form.reset();
+      });
+
+      // Ishchi tanlashda hisobotni yangilash
+      selectWorker.addEventListener("change", () => {
+        updateSelectedSummary(selectWorker.value);
+      });
+
+      // Bo‘lim tanlashda jadval va hisobotni yangilash
+      selectDepartment.addEventListener("change", () => {
+        renderTable();
+        updateSummary();
+        updateWorkerOptions();
+        selectWorker.value = "";
+        selectedSummaryDiv.innerHTML = "Ishchini yuqoridan tanlang.";
+      });
+
+      // Excel ga eksport (CSV)
+      exportBtn.addEventListener("click", () => {
+        const filterDept = selectDepartment.value;
+        let filtered = filterDept
+          ? records.filter((r) => r.department === filterDept)
+          : records;
+        if (filtered.length === 0) {
+          alert("Eksport uchun ma'lumot yo'q");
+          return;
+        }
+
+        let csvContent = "data:text/csv;charset=utf-8,";
+        csvContent += "Ism,Bo‘lim,Sana,Kirish,Ketish,Umumiy Ishlagan Soat\n";
+
+        filtered.forEach((r) => {
+          const startMin = timeToMinutes(r.start);
+          const endMin = timeToMinutes(r.end);
+          const worked = calculateWorkMinutes(startMin, endMin, breaks);
+          csvContent += `${r.name},${r.department},${r.date},${r.start},${
+            r.end
+          },${(worked / 60).toFixed(2)}\n`;
+        });
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        const now = new Date();
+        const filename = `tabel_${now.getFullYear()}-${
+          now.getMonth() + 1
+        }-${now.getDate()}.csv`;
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      });
+
+      // Dastlabki yuklash
+      renderBreaks();
+      renderTable();
+      updateSummary();
+      updateWorkerOptions();
+    </script>
+  </body>
+</html>
